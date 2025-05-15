@@ -33,13 +33,25 @@ async function main() {
         thumbnailSurl: file.thumbnail_surl || '',
         comments: {
           create: file.comments
-            ? Object.entries(file.comments).map(([commentId, comment]) => ({
-                id: commentId,
-                userId: 'test',
-                nickname: 'nickname',
-                comment: 'comment',
-                createdAt: BigInt(1234567),
-              }))
+            ? Object.entries(file.comments).map(([commentId, comment]) => {
+                const c = comment as {
+                  comment: string;
+                  created: number;
+                  // fileId: string;
+                  idComment: string;
+                  nickname: string;
+                  user: string;
+                };
+
+                return {
+                  id: commentId,
+                  // fileId: file.fileId,
+                  userId: c.user,
+                  nickname: c.nickname,
+                  comment: c.comment,
+                  createdAt: BigInt(c.created),
+                };
+              })
             : [],
         },
       },
