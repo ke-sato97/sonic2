@@ -1,14 +1,16 @@
 FROM node:20-alpine
 
-WORKDIR /app
+ENV DEBIAN_FRONTEND=noninteractive
 
-# 必要なツールをインストール
-RUN apk add --no-cache bash
-
-# シェルをbashに設定
-SHELL ["/bin/bash", "-c"]
+# 必要なツールをインストール（vim など便利系も追加）
+RUN apk add --no-cache \
+    bash \
+    vim \
+    git \
+    curl \
+    wget \
+    tzdata \
+    net-tools \
+    iputils
 
 EXPOSE 3000
-
-# コンテナ起動時にTailwindCSSを監視しながらNext.jsを開発モードで実行
-CMD ["sh", "-c", "tail -f /dev/null"]

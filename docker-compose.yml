@@ -1,35 +1,36 @@
 version: '3.9'
+
 services:
   app:
     build:
       context: .
       dockerfile: Dockerfile
-    ports:
-      - "3000:3000"
+    container_name: sonic_app
     volumes:
       - ./app:/app
-    tty: true
-    stdin_open: true
+    working_dir: /app
+    ports:
+      - "3000:3000"
+    command: sh -c "npm install && npm run dev"
     depends_on:
       - db
+    environment:
+      DATABASE_URL: mysql://user:password@db:3306/sonic
     restart: unless-stopped
 
   db:
-    image: mysql:8.3
-    platform: linux/amd64
+    image: mysql:8.0
+    container_name: sonic_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: sonic
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
     ports:
       - "3306:3306"
     volumes:
-      - ./mysql/conf.d:/etc/mysql/conf.d
-      - ./mysql/init.d:/docker-entrypoint-initdb.d
-      - mysql_data:/var/lib/mysql
-    environment:
-      - MYSQL_ROOT_PASSWORD=rootpassword
-      - MYSQL_DATABASE=sonic
-      - MYSQL_USER=user
-      - MYSQL_PASSWORD=password
-    command: --default-authentication-plugin=mysql_native_password
-    restart: unless-stopped
+      - mysql-data:/var/lib/mysql
 
 volumes:
-  mysql_data:
+  mysql-data:
