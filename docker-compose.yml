@@ -1,0 +1,35 @@
+version: '3.9'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./app:/app
+    tty: true
+    stdin_open: true
+    depends_on:
+      - db
+    restart: unless-stopped
+
+  db:
+    image: mysql:8.3
+    platform: linux/amd64
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql/conf.d:/etc/mysql/conf.d
+      - ./mysql/init.d:/docker-entrypoint-initdb.d
+      - mysql_data:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=rootpassword
+      - MYSQL_DATABASE=sonic
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=password
+    command: --default-authentication-plugin=mysql_native_password
+    restart: unless-stopped
+
+volumes:
+  mysql_data:
