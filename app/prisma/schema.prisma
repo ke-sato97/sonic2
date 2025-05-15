@@ -6,10 +6,47 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+}
+
+model File {
+  id               String    @id @map("id")
+  userId           String    @map("user_id")
+  createdAt        BigInt    @map("created_at")
+  commentCount     Int       @map("comment_count")
+  likeCount        Int       @map("like_count")
+  filenameSmall    String    @map("filename_small")
+  filesize         Int       @map("filesize")
+  type             String    @map("type")
+  url              String    @map("url")
+  videoDuration    Int       @map("video_duration")
+  videoURL         String    @map("video_url")
+  ref              String    @map("ref")
+  thumbnailRef     String    @map("thumbnail_ref")
+  thumbnailUrl     String    @map("thumbnail_url")
+  thumbnailMurl    String    @map("thumbnail_murl")
+  thumbnailSurl    String    @map("thumbnail_surl")
+
+  comments         Comment[]
+
+  @@map("files")
+}
+
+model Comment {
+  id         String   @id @map("id")
+  fileId     String   @map("file_id")
+  userId     String   @map("user_id")
+  nickname   String   @map("nickname")
+  comment    String   @map("comment")
+  createdAt  BigInt   @map("created_at")
+
+  file       File     @relation(fields: [fileId], references: [id], onDelete: Cascade)
+
+  @@index([fileId])
+  @@map("comments")
 }
