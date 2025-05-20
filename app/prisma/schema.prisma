@@ -17,7 +17,7 @@ datasource db {
 model File {
   id               String    @id @map("id")
   userId           String    @map("user_id")
-  createdAt        BigInt    @map("created_at")
+  createdAt        String    @map("created_at")
   commentCount     Int       @map("comment_count")
   likeCount        Int       @map("like_count")
   filenameSmall    String    @map("filename_small")
@@ -43,7 +43,7 @@ model Comment {
   userId     String   @map("user_id")
   nickname   String   @map("nickname")
   comment    String   @map("comment")
-  createdAt  BigInt   @map("created_at")
+  createdAt  String   @map("created_at")
 
   file       File     @relation(fields: [fileId], references: [id], onDelete: Cascade)
 
