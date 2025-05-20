@@ -11,13 +11,20 @@ async function main() {
   for (const fileId in files) {
     const file = files[fileId];
 
+    if (file.fileId === undefined) {
+      console.log('すきっぷ');
+      continue;
+    }
+
+    const castCreated: string = String(file.created);
+
     await prisma.file.upsert({
       where: { id: file.fileId },
       update: {}, // ここに更新内容を書く（必要なら）
       create: {
         id: file.fileId,
         userId: file.user,
-        createdAt: BigInt(file.created),
+        createdAt: castCreated,
         commentCount: file.comment_count || 0,
         likeCount: file.like_count || 0,
         filenameSmall: file.filename_small || '',
@@ -49,7 +56,7 @@ async function main() {
                   userId: c.user,
                   nickname: c.nickname,
                   comment: c.comment,
-                  createdAt: BigInt(c.created),
+                  createdAt: String(c.created),
                 };
               })
             : [],

@@ -2,7 +2,7 @@
 CREATE TABLE `files` (
     `id` VARCHAR(191) NOT NULL,
     `user_id` VARCHAR(191) NOT NULL,
-    `created_at` BIGINT NOT NULL,
+    `created_at` VARCHAR(191) NOT NULL,
     `comment_count` INTEGER NOT NULL,
     `like_count` INTEGER NOT NULL,
     `filename_small` VARCHAR(191) NOT NULL,
@@ -27,7 +27,7 @@ CREATE TABLE `comments` (
     `user_id` VARCHAR(191) NOT NULL,
     `nickname` VARCHAR(191) NOT NULL,
     `comment` VARCHAR(191) NOT NULL,
-    `created_at` BIGINT NOT NULL,
+    `created_at` VARCHAR(191) NOT NULL,
 
     INDEX `comments_file_id_idx`(`file_id`),
     PRIMARY KEY (`id`)
